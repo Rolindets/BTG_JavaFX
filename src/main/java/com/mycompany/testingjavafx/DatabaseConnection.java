@@ -34,45 +34,4 @@ public class DatabaseConnection {
         }
         return connection;
     }
-    
-    public static boolean isDatabaseConnected() 
-    {
-        Connection connection = null;
-        try 
-        {
-            connection = getConnection();
-            return connection != null && !connection.isClosed();
-        } catch (SQLException e) 
-        {
-            e.printStackTrace();
-            return false;
-        } finally 
-        {
-            try 
-            {
-                if (connection != null)
-                {
-                    connection.close();
-                }
-            } catch (SQLException e) 
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void main(String[] args) 
-    {
-        // Test the connection
-        Connection connection = DatabaseConnection.getConnection();
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        //System.out.println(System.getProperty("java.class.path"));
-    }
 }
-

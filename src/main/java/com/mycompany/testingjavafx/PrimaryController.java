@@ -18,7 +18,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class PrimaryController {
+public class PrimaryController
+{
     
     @FXML
     Pane myPane;

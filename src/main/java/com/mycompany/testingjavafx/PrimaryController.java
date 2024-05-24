@@ -2,12 +2,19 @@ package com.mycompany.testingjavafx;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -23,8 +30,6 @@ public class PrimaryController
     ColorPicker myColorPicker;
     
     @FXML
-    Button saveButton;
-    @FXML
     private TextField firstNameTextField;
     @FXML
     private TextField lastNameTextField;
@@ -32,6 +37,22 @@ public class PrimaryController
     private TextField phoneTextField;
     @FXML
     private TextField emailTextField;    
+    
+    @FXML
+    private TableView<Customer> dataDisplayTable;
+    @FXML
+    private TableColumn<Customer, String> firstNameColumn;
+    @FXML
+    private TableColumn<Customer, String> lastNameColumn;
+    @FXML
+    private TableColumn<Customer, Integer> idColumn;
+    @FXML
+    private TableColumn<Customer, String> permitNumberColumn;
+    @FXML
+    private TableColumn<Customer, String> quoteNumberColumn;
+
+    private ObservableList<Customer> data = FXCollections.observableArrayList();
+
     
     @FXML
     public void changeColor()
@@ -88,9 +109,9 @@ public class PrimaryController
             int rowsInserted = preparedStatement.executeUpdate();
 
             if (rowsInserted > 0) {
-                System.out.println("A new customer was inserted successfully!");
+                System.out.println("\nA new customer was inserted successfully!");
             } else {
-                System.out.println("Inserting customer failed, no rows affected.");
+                System.out.println("\nInserting customer failed, no rows affected.");
             }
 
         } catch (SQLException e) {
@@ -111,6 +132,83 @@ public class PrimaryController
     }
     
     @FXML
+    public void searchButton() {
+        // Establish a connection to the database
+        DatabaseConnection connectNow = new DatabaseConnection();
+        Connection connectDB = connectNow.getConnection();
+
+        // Get the input from text fields
+        String firstNameInput = firstNameTextField.getText().trim();
+        String lastNameInput = lastNameTextField.getText().trim();
+
+        // Start building the SQL query
+        StringBuilder queryBuilder = new StringBuilder("SELECT first_name, last_name, customer_id FROM customers");
+
+        // Check if first name or last name is provided
+        boolean hasFirstName = !firstNameInput.isEmpty();
+        boolean hasLastName = !lastNameInput.isEmpty();
+
+        // Append conditions to the query based on input
+        if (hasFirstName || hasLastName) {
+            queryBuilder.append(" WHERE");
+
+            if (hasFirstName) {
+                queryBuilder.append(" first_name = ?");
+            }
+
+            if (hasLastName) {
+                if (hasFirstName) {
+                    queryBuilder.append(" AND");
+                }
+                queryBuilder.append(" last_name = ?");
+            }
+        }
+
+        // Convert the query to a string
+        String query = queryBuilder.toString();
+
+        try (PreparedStatement preparedStatement = connectDB.prepareStatement(query)) {
+            // Set parameters in the prepared statement
+            int paramIndex = 1;
+            if (hasFirstName) {
+                preparedStatement.setString(paramIndex++, firstNameInput);
+            }
+            if (hasLastName) {
+                preparedStatement.setString(paramIndex++, lastNameInput);
+            }
+
+            // Execute the query
+            ResultSet queryResult = preparedStatement.executeQuery();
+
+            // Clear previous data in the list
+            data.clear();
+
+            // Process query results
+            while (queryResult.next()) {
+                // Retrieve data from the result set
+                String firstName = queryResult.getString("first_name");
+                String lastName = queryResult.getString("last_name");
+                int customerId = queryResult.getInt("customer_id");
+
+                // Add retrieved data to the list
+                data.add(new Customer(firstName, lastName, customerId));
+            }
+
+            // Map columns to Customer properties
+            firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+            lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+            idColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+
+            // Set data to the TableView
+            dataDisplayTable.setItems(data);
+
+        } catch (Exception e) {
+            // Print stack trace in case of exceptions
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void clearButton()
     {
         firstNameTextField.clear();
@@ -125,3 +223,48 @@ public class PrimaryController
         Platform.exit();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+//    @FXML
+//    public void searchButton() {
+//        DatabaseConnection connectNow = new DatabaseConnection();
+//        Connection connectDB = connectNow.getConnection();
+//
+//        String connectQuery = "SELECT first_name, last_name, customer_id FROM customers;";
+//
+//        try 
+//        {
+//            Statement statement = connectDB.createStatement();
+//            ResultSet queryResult = statement.executeQuery(connectQuery);
+//
+//            data.clear();
+//
+//            while (queryResult.next()) {
+//                String firstName = queryResult.getString("first_name");
+//                String lastName = queryResult.getString("last_name");
+//                int customerId = queryResult.getInt("customer_id");
+//
+//                data.add(new Customer(firstName, lastName, customerId));
+//            }
+//
+//            // Map columns to Customer properties
+//            firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+//            lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+//            idColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+//
+//            // Set data to the TableView
+//            dataDisplayTable.setItems(data);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }

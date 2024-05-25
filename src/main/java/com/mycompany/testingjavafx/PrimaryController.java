@@ -1,6 +1,8 @@
 package com.mycompany.testingjavafx;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +11,9 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TableColumn;
@@ -19,6 +24,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 public class PrimaryController
 {
@@ -28,6 +34,9 @@ public class PrimaryController
 
     @FXML
     ColorPicker myColorPicker;
+    
+    @FXML
+    Button editButton;
     
     @FXML
     private TextField firstNameTextField;
@@ -207,7 +216,7 @@ public class PrimaryController
             e.printStackTrace();
         }
     }
-
+    
     @FXML
     public void clearButton()
     {
@@ -218,11 +227,54 @@ public class PrimaryController
     }
     
     @FXML
-    private void exitButton()
+    private void deleteButton()
     {
-        Platform.exit();
+        Customer selectedPerson = dataDisplayTable.getSelectionModel().getSelectedItem();
+        if (selectedPerson != null) 
+        {
+            int selectedPersonId = selectedPerson.getCustomerId();
+            data.remove(selectedPerson);
+
+            try 
+            {
+                deletePersonFromDatabase(selectedPersonId);
+            } catch (SQLException e) 
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+       
+    private void deletePersonFromDatabase(int id) throws SQLException 
+    {
+        // Establish a connection to the database
+        DatabaseConnection connectNow = new DatabaseConnection();
+        Connection connectDB = connectNow.getConnection();
+        
+        // Start building the SQL query
+        StringBuilder queryBuilder = new StringBuilder("DELETE FROM Customers WHERE customer_id = ?");
+        
+        // Convert the query to a string
+        String query = queryBuilder.toString();
+
+        try (PreparedStatement preparedStatement = connectDB.prepareStatement(query)) 
+        {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        }
+    }
+    
+    @FXML
+    public void editButton() throws IOException
+    {
+        Parent root = FXMLLoader.load(getClass().getResource("Secondary.fxml"));
+        
+        Stage window = (Stage)editButton.getScene().getWindow();
+        window.setScene(new Scene(root, 1645, 1069));
     }
 }
+
+
 
 
 

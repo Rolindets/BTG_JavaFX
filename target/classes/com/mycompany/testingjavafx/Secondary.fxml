@@ -202,12 +202,12 @@
                   <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="textFieldUploadedDate" layoutX="1397.0" layoutY="94.0" prefHeight="30.0" prefWidth="189.0" promptText="Uploaded Date">
+            <TextField fx:id="uploadedDateTextField" layoutX="1397.0" layoutY="94.0" prefHeight="30.0" prefWidth="189.0" promptText="Uploaded Date">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="textFieldPermitNumber" layoutX="1397.0" layoutY="129.0" prefHeight="30.0" prefWidth="188.0" promptText="Permit Number">
+            <TextField fx:id="permitNumberTextFIeld" layoutX="1397.0" layoutY="129.0" prefHeight="30.0" prefWidth="188.0" promptText="Permit Number">
                <font>
                   <Font size="18.0" />
                </font>

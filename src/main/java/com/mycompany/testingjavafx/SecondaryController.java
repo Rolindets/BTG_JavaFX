@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 
@@ -17,6 +18,17 @@ import javafx.stage.Stage;
 
 public class SecondaryController implements Initializable 
 {
+    
+    @FXML
+    private TextField firstNameTextField;
+    @FXML
+    private TextField lastNameTextField;
+    @FXML
+    private TextField phoneTextField;
+    @FXML
+    private TextField emailTextField;
+    
+    private int customerId;
     
     @FXML
     Button backButton;
@@ -33,6 +45,15 @@ public class SecondaryController implements Initializable
         
         Stage window = (Stage)backButton.getScene().getWindow();
         window.setScene(new Scene(root, 1645, 1069));
+    }
+
+    void setCustomerDetails(String firstName, String lastName, String phone, String email, int selectedCustomerId) 
+    {
+        firstNameTextField.setText(firstName);
+        lastNameTextField.setText(lastName);
+        phoneTextField.setText(phone);
+        emailTextField.setText(email);
+        this.customerId = customerId;
     }
     
 }

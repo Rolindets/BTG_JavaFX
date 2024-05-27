@@ -54,6 +54,8 @@ public class PrimaryController
     @FXML
     private TableColumn<Customer, String> lastNameColumn;
     @FXML
+    private TableColumn<Customer, String> phoneColumn;
+    @FXML
     private TableColumn<Customer, Integer> idColumn;
     @FXML
     private TableColumn<Customer, String> permitNumberColumn;
@@ -151,7 +153,7 @@ public class PrimaryController
         String lastNameInput = lastNameTextField.getText().trim();
 
         // Start building the SQL query
-        StringBuilder queryBuilder = new StringBuilder("SELECT first_name, last_name, customer_id FROM customers");
+        StringBuilder queryBuilder = new StringBuilder("SELECT first_name, last_name, phone, email, customer_id FROM customers");
 
         // Check if first name or last name is provided
         boolean hasFirstName = !firstNameInput.isEmpty();
@@ -197,10 +199,13 @@ public class PrimaryController
                 // Retrieve data from the result set
                 String firstName = queryResult.getString("first_name");
                 String lastName = queryResult.getString("last_name");
+                String phone = queryResult.getString("phone");
+                String email = queryResult.getString("email");
+
                 int customerId = queryResult.getInt("customer_id");
 
                 // Add retrieved data to the list
-                data.add(new Customer(firstName, lastName, customerId));
+                data.add(new Customer(firstName, lastName, phone, email, customerId));
             }
 
             // Map columns to Customer properties
@@ -265,19 +270,64 @@ public class PrimaryController
     }
     
     @FXML
-    public void editButton() throws IOException
+    public void editButton() throws IOException, SQLException
     {
-        Parent root = FXMLLoader.load(getClass().getResource("Secondary.fxml"));
+        Customer selectedCustomer = dataDisplayTable.getSelectionModel().getSelectedItem();
         
-        Stage window = (Stage)editButton.getScene().getWindow();
-        window.setScene(new Scene(root, 1645, 1069));
+        if(selectedCustomer == null)
+        {
+            System.out.println("Please select a cusotmer to edit.");
+            return;
+        }
+        
+        int selectedCustomerId = selectedCustomer.getCustomerId();
+        
+        DatabaseConnection connectNow = new DatabaseConnection();
+        Connection connectDB = connectNow.getConnection();
+        
+        // Start building the SQL query
+        StringBuilder queryBuilder = new StringBuilder("SELECT first_name, last_name, phone, email, customer_id FROM customers WHERE customer_id = ? ");
+        PreparedStatement preparedStatement = connectDB.prepareStatement(queryBuilder.toString());
+        preparedStatement.setInt(1, selectedCustomerId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        
+        if(resultSet.next())
+        {
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            String phone = resultSet.getString("phone");
+            String email = resultSet.getString("email");
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Secondary.fxml"));
+            Parent root = loader.load();
+            
+            SecondaryController secondaryController = loader.getController();
+            secondaryController.setCustomerDetails(firstName, lastName, phone, email, selectedCustomerId);
+            
+            Stage window = (Stage)editButton.getScene().getWindow();
+            window.setScene(new Scene(root, 1645, 1069));
+        }
+        connectDB.close();
     }
 }
 
 
 
 
-
+//@FXML
+//    public void editButton() throws IOException
+//    {
+//        DatabaseConnection connectNow = new DatabaseConnection();
+//        Connection connectDB = connectNow.getConnection();
+//        
+//        // Start building the SQL query
+//        StringBuilder queryBuilder = new StringBuilder("SELECT first_name, last_name, phone, customer_id FROM customers");
+//        
+//        Parent root = FXMLLoader.load(getClass().getResource("Secondary.fxml"));
+//        
+//        Stage window = (Stage)editButton.getScene().getWindow();
+//        window.setScene(new Scene(root, 1645, 1069));
+//    }
 
 
 

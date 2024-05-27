@@ -86,9 +86,10 @@
       <Button fx:id="editButton" layoutX="1401.0" layoutY="931.0" mnemonicParsing="false" onAction="#editButton" style="-fx-background-color: rgb(232, 190, 21);" text="EDIT CUSTOMER" />
       <TableView fx:id="dataDisplayTable" layoutX="165.0" layoutY="361.0" prefHeight="560.0" prefWidth="1337.0" style="-fx-background-color: DCEEFF;">
          <columns>
-            <TableColumn fx:id="idColumn" editable="false" prefWidth="94.0" resizable="false" text="ID" />
-            <TableColumn fx:id="firstNameColumn" editable="false" minWidth="0.0" prefWidth="596.0" resizable="false" text="First Name" />
-            <TableColumn fx:id="lastNameColumn" editable="false" prefWidth="408.0" resizable="false" text="Last Name" />
+            <TableColumn fx:id="idColumn" editable="false" prefWidth="182.0" resizable="false" text="ID" />
+            <TableColumn fx:id="firstNameColumn" editable="false" minWidth="0.0" prefWidth="466.0" resizable="false" text="First Name" />
+            <TableColumn fx:id="lastNameColumn" editable="false" prefWidth="534.0" resizable="false" text="Last Name" />
+            <TableColumn fx:id="actionColumn" editable="false" maxWidth="764.0" minWidth="-1.0" prefWidth="154.0" resizable="false" sortable="false" text="Action" />
          </columns>
       </TableView>
       <ButtonBar layoutX="519.0" layoutY="961.0" prefHeight="68.0" prefWidth="567.0">

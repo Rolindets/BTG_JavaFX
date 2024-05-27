@@ -117,22 +117,22 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="textFieldFirstName" layoutX="137.0" layoutY="18.0" prefHeight="30.0" prefWidth="423.0" promptText="First Name">
+            <TextField fx:id="firstNameTextField" layoutX="137.0" layoutY="18.0" prefHeight="30.0" prefWidth="423.0" promptText="First Name">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="textFieldLastName" layoutX="137.0" layoutY="55.0" prefHeight="30.0" prefWidth="423.0" promptText="Last Name">
+            <TextField fx:id="lastNameTextField" layoutX="137.0" layoutY="55.0" prefHeight="30.0" prefWidth="423.0" promptText="Last Name">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="textFieldPhone" layoutX="137.0" layoutY="92.0" prefHeight="30.0" prefWidth="423.0" promptText="Phone Number">
+            <TextField fx:id="phoneTextField" layoutX="137.0" layoutY="92.0" prefHeight="30.0" prefWidth="423.0" promptText="Phone Number">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="textFieldEmail" layoutX="137.0" layoutY="129.0" prefHeight="30.0" prefWidth="423.0" promptText="Email Address">
+            <TextField fx:id="emailTextField" layoutX="137.0" layoutY="129.0" prefHeight="30.0" prefWidth="423.0" promptText="Email Address">
                <font>
                   <Font size="18.0" />
                </font>
@@ -297,37 +297,37 @@
             </TextField>
             <TextField fx:id="textFieldCost" prefHeight="69.0" prefWidth="109.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font>
             </TextField>
             <TextField fx:id="textFieldInstall" prefHeight="69.0" prefWidth="109.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font>
             </TextField>
             <TextField fx:id="textFieldTotal" prefHeight="69.0" prefWidth="109.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font>
             </TextField>
             <TextField fx:id="textFieldSold" prefHeight="69.0" prefWidth="109.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font>
             </TextField>
             <TextField fx:id="textFieldProfit" prefHeight="69.0" prefWidth="109.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font>
             </TextField>
             <TextField fx:id="textField50" prefHeight="69.0" prefWidth="109.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font>
             </TextField>
             <TextField fx:id="textFieldMisc" prefHeight="69.0" prefWidth="109.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font>
             </TextField>
          </children>

@@ -152,22 +152,22 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="textFieldAddress" layoutX="757.0" layoutY="19.0" prefHeight="30.0" prefWidth="423.0" promptText="Address">
+            <TextField fx:id="addressTextField" layoutX="757.0" layoutY="19.0" prefHeight="30.0" prefWidth="423.0" promptText="Address">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="textFieldCity" layoutX="757.0" layoutY="56.0" prefHeight="30.0" prefWidth="423.0" promptText="City">
+            <TextField fx:id="cityTextField" layoutX="757.0" layoutY="56.0" prefHeight="30.0" prefWidth="423.0" promptText="City">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="textFieldState" layoutX="757.0" layoutY="94.0" prefHeight="30.0" prefWidth="423.0" promptText="State" text="Florida">
+            <TextField fx:id="stateTextField" layoutX="757.0" layoutY="94.0" prefHeight="30.0" prefWidth="423.0" promptText="State" text="Florida">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="textFieldZipCode" layoutX="757.0" layoutY="130.0" prefHeight="30.0" prefWidth="423.0" promptText="zip code">
+            <TextField fx:id="zipCodeTextField" layoutX="757.0" layoutY="130.0" prefHeight="30.0" prefWidth="423.0" promptText="zip code">
                <font>
                   <Font size="18.0" />
                </font>
@@ -192,12 +192,12 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="textFieldContractor" layoutX="1397.0" layoutY="20.0" prefHeight="30.0" prefWidth="188.0" promptText="Contractor Number">
+            <TextField fx:id="contractorTextField" layoutX="1397.0" layoutY="20.0" prefHeight="30.0" prefWidth="188.0" promptText="Contractor Number">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="textFieldOrderedDate" layoutX="1397.0" layoutY="57.0" prefHeight="30.0" prefWidth="189.0" promptText="Ordered Date">
+            <TextField fx:id="orderedDateTextField" layoutX="1397.0" layoutY="57.0" prefHeight="30.0" prefWidth="189.0" promptText="Ordered Date">
                <font>
                   <Font size="18.0" />
                </font>
@@ -336,7 +336,7 @@
    <bottom>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="698.0" layoutY="73.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="109.0" style="-fx-background-color: rgba(36, 241, 80, 0.8);" text="SAVE">
+            <Button fx:id="saveButton" layoutX="698.0" layoutY="73.0" mnemonicParsing="false" onAction="#saveButton" prefHeight="55.0" prefWidth="109.0" style="-fx-background-color: rgba(36, 241, 80, 0.8);" text="SAVE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

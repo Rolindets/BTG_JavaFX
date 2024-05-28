@@ -83,10 +83,12 @@ public class PrimaryController
         try
         {
             // Ensure the text field is accessible and get the value from it
-            String firstName = firstNameTextField.getText();
-            String lastName = lastNameTextField.getText();
-            String phone = phoneTextField.getText();
-            String email = emailTextField.getText();
+            String firstName = (firstNameTextField.getText()!= null) ? firstNameTextField.getText().trim() : "";
+            String lastName = (lastNameTextField.getText()!= null) ? lastNameTextField.getText().trim() : "";
+            String phone = (phoneTextField.getText()!= null) ? phoneTextField.getText().trim() : "";
+            String email = (emailTextField.getText()!= null) ? emailTextField.getText().trim() : "";
+            
+            
 
             if (firstName == null || firstName.isEmpty()) 
             {
@@ -149,8 +151,9 @@ public class PrimaryController
         Connection connectDB = connectNow.getConnection();
 
         // Get the input from text fields
-        String firstNameInput = firstNameTextField.getText().trim();
-        String lastNameInput = lastNameTextField.getText().trim();
+        String firstNameInput = (firstNameTextField.getText()!= null) ? firstNameTextField.getText().trim() : "";
+        String lastNameInput = (lastNameTextField.getText()!= null) ? lastNameTextField.getText().trim() : "";
+
 
         // Start building the SQL query
         StringBuilder queryBuilder = new StringBuilder("SELECT first_name, last_name, phone, email, customer_id FROM customers");

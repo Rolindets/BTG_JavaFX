@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,6 +52,22 @@ public class SecondaryController implements Initializable
     private TextField uploadedDateTextField;
     @FXML
     private TextField permitNumberTextField;
+    @FXML
+    private TextField quoteTextField;
+    @FXML
+    private TextField costTextField;
+    @FXML
+    private TextField installTextField;
+    @FXML
+    private TextField totalTextField;
+    @FXML
+    private TextField soldTextField;
+    @FXML
+    private TextField profitTextField;
+    @FXML
+    private TextField fiftyTextField;
+    @FXML
+    private TextField miscTextField;
     
     @FXML
     private CheckBox hasPermit;
@@ -80,7 +98,52 @@ public class SecondaryController implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Add listeners to the cost and sold text fields
+        costTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                calculateProfit();
+            }
+
+        });
+
+        soldTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                calculateProfit();
+            }
+        });
         
+        installTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                calculateProfit();
+            }
+
+        });
+    }
+    
+    
+    
+    private void calculateProfit() 
+    {
+            try 
+            {
+                double cost = Double.parseDouble(costTextField.getText());
+                double sold = Double.parseDouble(soldTextField.getText());
+                double install = Double.parseDouble(installTextField.getText());
+
+                double total = cost + install;
+                double profit = (sold - cost) - install;
+                double fiftyPercent = (sold - install) / 2;
+                
+                profitTextField.setText(String.format("%.2f", profit));
+                totalTextField.setText(String.format("%.2f", total));
+                fiftyTextField.setText(String.format("%.2f", fiftyPercent));
+
+            } catch (NumberFormatException e) {
+                profitTextField.setText("Invalid input");
+            }
     }
 
     @FXML
@@ -122,6 +185,14 @@ public class SecondaryController implements Initializable
         hasRamms.setSelected(rs.getBoolean("has_ramms"));
         hasRetrofit.setSelected(rs.getBoolean("has_retrofit"));
         hasDrawing.setSelected(rs.getBoolean("has_drawing"));
+        quoteTextField.setText(rs.getString("quote")); 
+        costTextField.setText(rs.getString("cost")); 
+        installTextField.setText(rs.getString("install")); 
+        totalTextField.setText(rs.getString("total_cost")); 
+        soldTextField.setText(rs.getString("sold")); 
+        profitTextField.setText(rs.getString("profit")); 
+        fiftyTextField.setText(rs.getString("fifty_percent")); 
+        miscTextField.setText(rs.getString("misc")); 
     }
     
     @FXML
@@ -143,14 +214,20 @@ public void saveButton() {
     // Query to insert a new entry into the blue_forms table
     String insertBlueFormQuery = "INSERT INTO blue_forms (customer_id, first_name, last_name, phone, "
         + "email, address, city, state, zip_code, contractor_fee, order_date, upload_date, "
-        + "permit_number, has_permit, has_noc, has_noa, has_hoa, has_licins, has_notary, "
-        + "has_ramms, has_retrofit, has_drawing, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        + "permit_number, quote, cost, install, total_cost, sold, profit, fifty_percent, misc, has_permit, "
+        + "has_noc, has_noa, has_hoa, has_licins, has_notary, has_ramms, has_retrofit, "
+        + "has_drawing, notes) VALUES (?, ?, ?, ?, ?, ?,"
+            + " ?, ?, ?, ?, ?, ?,"
+            + " ?, ?, ?, ?, ?, ?,"
+            + " ?, ?, ?, ?, ?, ?,"
+            + " ?, ?, ?, ?, ?, ?, ?)";
 
 
     // Query to update an existing entry in the blue_forms table to avoid adding and new entry with same permit number
     String updateBlueFormQuery = "UPDATE blue_forms SET customer_id = ?, first_name = ?, "
         + "last_name = ?, phone = ?, email = ?, address = ?, city = ?, state = ?, zip_code = ?, "
-        + "contractor_fee = ?, order_date = ?, upload_date = ?, has_permit = ?, has_noc = ?, "
+        + "contractor_fee = ?, order_date = ?, upload_date = ?, quote = ?, cost = ?, install = ?, "
+        + "total_cost = ?, sold = ?, profit = ?, fifty_percent = ?, misc = ?, has_permit = ?, has_noc = ?, "
         + "has_noa = ?, has_hoa = ?, has_licins = ?, has_notary = ?, has_ramms = ?, has_retrofit = ?, "
         + "has_drawing = ?, notes = ? WHERE permit_number = ?";
 
@@ -170,7 +247,14 @@ public void saveButton() {
         String uploadedDate = uploadedDateTextField.getText();
         String permitNumber = permitNumberTextField.getText();
         String notes = textAreaNotes.getText();
-
+        String quote = quoteTextField.getText();
+        String cost = costTextField.getText();
+        String install = installTextField.getText();
+        String totalCost = totalTextField.getText();
+        String sold = soldTextField.getText();
+        String profit = profitTextField.getText();
+        String fiftyPercent = fiftyTextField.getText();
+        String misc = miscTextField.getText();
 
         // Get checkbox states
         boolean hasPermitState = hasPermit.isSelected();
@@ -245,21 +329,26 @@ public void saveButton() {
         updateBlueFormStatement.setDouble(10, contractorFeeDouble);
         updateBlueFormStatement.setString(11, orderedDate);
         updateBlueFormStatement.setString(12, uploadedDate);
-        updateBlueFormStatement.setBoolean(13, hasPermitState);
-        updateBlueFormStatement.setBoolean(14, hasNOCState);
-        updateBlueFormStatement.setBoolean(15, hasNOAState);
-        updateBlueFormStatement.setBoolean(16, hasHOAState);
-        updateBlueFormStatement.setBoolean(17, hasLICINSState);
-        updateBlueFormStatement.setBoolean(18, hasNotaryState);
-        updateBlueFormStatement.setBoolean(19, hasRammsState);
-        updateBlueFormStatement.setBoolean(20, hasRetrofitState);
-        updateBlueFormStatement.setBoolean(21, hasDrawingState);
-        updateBlueFormStatement.setString(22, notes);
-        updateBlueFormStatement.setString(23, permitNumber);
-            
-
-
-
+        updateBlueFormStatement.setString(13, quote);
+        updateBlueFormStatement.setString(14, cost);
+        updateBlueFormStatement.setString(15, install);
+        updateBlueFormStatement.setString(16, totalCost);
+        updateBlueFormStatement.setString(17, sold);
+        updateBlueFormStatement.setString(18, profit);
+        updateBlueFormStatement.setString(19, fiftyPercent);
+        updateBlueFormStatement.setString(20, misc);
+        updateBlueFormStatement.setBoolean(21, hasPermitState);
+        updateBlueFormStatement.setBoolean(22, hasNOCState);
+        updateBlueFormStatement.setBoolean(23, hasNOAState);
+        updateBlueFormStatement.setBoolean(24, hasHOAState);
+        updateBlueFormStatement.setBoolean(25, hasLICINSState);
+        updateBlueFormStatement.setBoolean(26, hasNotaryState);
+        updateBlueFormStatement.setBoolean(27, hasRammsState);
+        updateBlueFormStatement.setBoolean(28, hasRetrofitState);
+        updateBlueFormStatement.setBoolean(29, hasDrawingState);
+        updateBlueFormStatement.setString(30, notes);
+        updateBlueFormStatement.setString(31, permitNumber);
+        
             int rowsUpdated = updateBlueFormStatement.executeUpdate();
             if (rowsUpdated > 0) {
                 System.out.println("Existing blue form entry was updated successfully!");
@@ -282,25 +371,25 @@ public void saveButton() {
         insertBlueFormStatement.setString(11, orderedDate);
         insertBlueFormStatement.setString(12, uploadedDate);
         insertBlueFormStatement.setString(13, permitNumber);
-        insertBlueFormStatement.setBoolean(14, hasPermitState);
-        insertBlueFormStatement.setBoolean(15, hasNOCState);
-        insertBlueFormStatement.setBoolean(16, hasNOAState);
-        insertBlueFormStatement.setBoolean(17, hasHOAState);
-        insertBlueFormStatement.setBoolean(18, hasLICINSState);
-        insertBlueFormStatement.setBoolean(19, hasNotaryState);
-        insertBlueFormStatement.setBoolean(20, hasRammsState);
-        insertBlueFormStatement.setBoolean(21, hasRetrofitState);
-        insertBlueFormStatement.setBoolean(22, hasDrawingState);
-        insertBlueFormStatement.setString(23, notes);
-
-            
-//            String insertBlueFormQuery = "INSERT INTO blue_forms (customer_id, first_name, last_name, phone, "
-//        + "email, address, city, state, zip_code, contractor_fee, order_date, upload_date, "
-//        + "permit_number, notes, has_permit, has_noc, has_noa, has_hoa, has_licins, has_notary, "
-//        + "has_ramms, has_retrofit, has_drawing) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-
-
+        insertBlueFormStatement.setString(14, quote);
+        insertBlueFormStatement.setString(15, cost);
+        insertBlueFormStatement.setString(16, install);
+        insertBlueFormStatement.setString(17, totalCost);
+        insertBlueFormStatement.setString(18, sold);
+        insertBlueFormStatement.setString(19, profit);
+        insertBlueFormStatement.setString(20, fiftyPercent);
+        insertBlueFormStatement.setString(21, misc);
+        insertBlueFormStatement.setBoolean(22, hasPermitState);
+        insertBlueFormStatement.setBoolean(23, hasNOCState);
+        insertBlueFormStatement.setBoolean(24, hasNOAState);
+        insertBlueFormStatement.setBoolean(25, hasHOAState);
+        insertBlueFormStatement.setBoolean(26, hasLICINSState);
+        insertBlueFormStatement.setBoolean(27, hasNotaryState);
+        insertBlueFormStatement.setBoolean(28, hasRammsState);
+        insertBlueFormStatement.setBoolean(29, hasRetrofitState);
+        insertBlueFormStatement.setBoolean(30, hasDrawingState);
+        insertBlueFormStatement.setString(31, notes);
+        
             int blueFormRowsInserted = insertBlueFormStatement.executeUpdate();
             if (blueFormRowsInserted > 0) {
                 System.out.println("A new blue form entry was inserted successfully!");

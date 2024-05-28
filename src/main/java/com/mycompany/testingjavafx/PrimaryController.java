@@ -287,9 +287,18 @@ public class PrimaryController
         
         // Start building the SQL query
         StringBuilder queryBuilder = new StringBuilder("SELECT first_name, last_name, phone, email, customer_id FROM customers WHERE customer_id = ? ");
+
         PreparedStatement preparedStatement = connectDB.prepareStatement(queryBuilder.toString());
         preparedStatement.setInt(1, selectedCustomerId);
         ResultSet resultSet = preparedStatement.executeQuery();
+        
+    
+        StringBuilder quoteQueryBuilder = new StringBuilder("SELECT * FROM blue_forms WHERE customer_id = ? limit 1");
+        
+        PreparedStatement preparedStatementQuote = connectDB.prepareStatement(quoteQueryBuilder.toString());
+        preparedStatementQuote.setInt(1, selectedCustomerId);
+        ResultSet resultSetQuote = preparedStatementQuote.executeQuery();
+        
         
         if(resultSet.next())
         {
@@ -297,12 +306,20 @@ public class PrimaryController
             String lastName = resultSet.getString("last_name");
             String phone = resultSet.getString("phone");
             String email = resultSet.getString("email");
+
             
+                        
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Secondary.fxml"));
             Parent root = loader.load();
             
             SecondaryController secondaryController = loader.getController();
             secondaryController.setCustomerDetails(firstName, lastName, phone, email, selectedCustomerId);
+            
+            if(resultSetQuote.next())
+            {
+                secondaryController.setQuoteData(resultSetQuote);
+            }
+
             
             Stage window = (Stage)editButton.getScene().getWindow();
             window.setScene(new Scene(root, 1645, 1069));

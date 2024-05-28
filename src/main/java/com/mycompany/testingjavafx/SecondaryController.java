@@ -76,6 +76,24 @@ public class SecondaryController implements Initializable
         this.customerId = customerId;
     }
     
+    void setQuoteData(ResultSet rs) throws SQLException 
+    {
+        
+        addressTextField.setText(rs.getString("address"));
+        cityTextField.setText(rs.getString("city"));
+        stateTextField.setText(rs.getString("state"));
+        zipCodeTextField.setText(rs.getString("zip_code"));
+        contractorTextField.setText(rs.getString("contractor_fee"));
+        orderedDateTextField.setText(rs.getString("ordered_date"));
+        uploadedDateTextField.setText(rs.getString("uploaded"));
+        permitNumberTextFIeld.setText(rs.getString("permit_number"));
+
+
+//        cityTextField.setText(lastName);
+//        stateTextField.setText(phone);
+//        zipCodeTextField.setText(email);       
+    }
+    
     @FXML
     public void saveButton() {
         DatabaseConnection connectNow = new DatabaseConnection();

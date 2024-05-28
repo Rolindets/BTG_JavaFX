@@ -1,6 +1,9 @@
 com\mycompany\testingjavafx\PrimaryController.class
 com\mycompany\testingjavafx\Customer.class
+com\mycompany\testingjavafx\SecondaryController$2.class
 com\mycompany\testingjavafx\DatabaseConnection.class
 module-info.class
+com\mycompany\testingjavafx\SecondaryController$3.class
+com\mycompany\testingjavafx\SecondaryController$1.class
 com\mycompany\testingjavafx\SecondaryController.class
 com\mycompany\testingjavafx\App.class

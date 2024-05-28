@@ -2,12 +2,9 @@ package com.mycompany.testingjavafx;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,7 +25,6 @@ import javafx.stage.Stage;
 
 public class PrimaryController
 {
-    
     @FXML
     Pane myPane;
 
@@ -54,13 +50,7 @@ public class PrimaryController
     @FXML
     private TableColumn<Customer, String> lastNameColumn;
     @FXML
-    private TableColumn<Customer, String> phoneColumn;
-    @FXML
     private TableColumn<Customer, Integer> idColumn;
-    @FXML
-    private TableColumn<Customer, String> permitNumberColumn;
-    @FXML
-    private TableColumn<Customer, String> quoteNumberColumn;
 
     private ObservableList<Customer> data = FXCollections.observableArrayList();
 
@@ -88,8 +78,6 @@ public class PrimaryController
             String phone = (phoneTextField.getText()!= null) ? phoneTextField.getText().trim() : "";
             String email = (emailTextField.getText()!= null) ? emailTextField.getText().trim() : "";
             
-            
-
             if (firstName == null || firstName.isEmpty()) 
             {
                 System.out.println("First name is empty");
@@ -116,7 +104,6 @@ public class PrimaryController
             preparedStatement.setString(2, lastName);
             preparedStatement.setString(3, phone);
             preparedStatement.setString(4, email);
-
 
             // Execute the prepared statement
             int rowsInserted = preparedStatement.executeUpdate();
@@ -145,7 +132,8 @@ public class PrimaryController
     }
     
     @FXML
-    public void searchButton() {
+    public void searchButton() 
+    {
         // Establish a connection to the database
         DatabaseConnection connectNow = new DatabaseConnection();
         Connection connectDB = connectNow.getConnection();
@@ -153,7 +141,6 @@ public class PrimaryController
         // Get the input from text fields
         String firstNameInput = (firstNameTextField.getText()!= null) ? firstNameTextField.getText().trim() : "";
         String lastNameInput = (lastNameTextField.getText()!= null) ? lastNameTextField.getText().trim() : "";
-
 
         // Start building the SQL query
         StringBuilder queryBuilder = new StringBuilder("SELECT first_name, last_name, phone, email, customer_id FROM customers");
@@ -163,15 +150,19 @@ public class PrimaryController
         boolean hasLastName = !lastNameInput.isEmpty();
 
         // Append conditions to the query based on input
-        if (hasFirstName || hasLastName) {
+        if (hasFirstName || hasLastName) 
+        {
             queryBuilder.append(" WHERE");
 
-            if (hasFirstName) {
+            if (hasFirstName) 
+            {
                 queryBuilder.append(" first_name = ?");
             }
 
-            if (hasLastName) {
-                if (hasFirstName) {
+            if (hasLastName) 
+            {
+                if (hasFirstName) 
+                {
                     queryBuilder.append(" AND");
                 }
                 queryBuilder.append(" last_name = ?");
@@ -181,13 +172,16 @@ public class PrimaryController
         // Convert the query to a string
         String query = queryBuilder.toString();
 
-        try (PreparedStatement preparedStatement = connectDB.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connectDB.prepareStatement(query))
+        {
             // Set parameters in the prepared statement
             int paramIndex = 1;
-            if (hasFirstName) {
+            if (hasFirstName) 
+            {
                 preparedStatement.setString(paramIndex++, firstNameInput);
             }
-            if (hasLastName) {
+            if (hasLastName) 
+            {
                 preparedStatement.setString(paramIndex++, lastNameInput);
             }
 
@@ -198,7 +192,8 @@ public class PrimaryController
             data.clear();
 
             // Process query results
-            while (queryResult.next()) {
+            while (queryResult.next()) 
+            {
                 // Retrieve data from the result set
                 String firstName = queryResult.getString("first_name");
                 String lastName = queryResult.getString("last_name");
@@ -219,7 +214,8 @@ public class PrimaryController
             // Set data to the TableView
             dataDisplayTable.setItems(data);
 
-        } catch (Exception e) {
+        } catch (Exception e) 
+        {
             // Print stack trace in case of exceptions
             e.printStackTrace();
         }
@@ -294,23 +290,19 @@ public class PrimaryController
         PreparedStatement preparedStatement = connectDB.prepareStatement(queryBuilder.toString());
         preparedStatement.setInt(1, selectedCustomerId);
         ResultSet resultSet = preparedStatement.executeQuery();
-        
     
         StringBuilder quoteQueryBuilder = new StringBuilder("SELECT * FROM blue_forms WHERE customer_id = ? limit 1");
         
         PreparedStatement preparedStatementQuote = connectDB.prepareStatement(quoteQueryBuilder.toString());
         preparedStatementQuote.setInt(1, selectedCustomerId);
-        ResultSet resultSetQuote = preparedStatementQuote.executeQuery();
-        
+        ResultSet resultSetQuote = preparedStatementQuote.executeQuery();     
         
         if(resultSet.next())
         {
             String firstName = resultSet.getString("first_name");
             String lastName = resultSet.getString("last_name");
             String phone = resultSet.getString("phone");
-            String email = resultSet.getString("email");
-
-            
+            String email = resultSet.getString("email");            
                         
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Secondary.fxml"));
             Parent root = loader.load();
@@ -322,7 +314,6 @@ public class PrimaryController
             {
                 secondaryController.setQuoteData(resultSetQuote);
             }
-
             
             Stage window = (Stage)editButton.getScene().getWindow();
             window.setScene(new Scene(root, 1645, 1069));
@@ -330,63 +321,3 @@ public class PrimaryController
         connectDB.close();
     }
 }
-
-
-
-
-//@FXML
-//    public void editButton() throws IOException
-//    {
-//        DatabaseConnection connectNow = new DatabaseConnection();
-//        Connection connectDB = connectNow.getConnection();
-//        
-//        // Start building the SQL query
-//        StringBuilder queryBuilder = new StringBuilder("SELECT first_name, last_name, phone, customer_id FROM customers");
-//        
-//        Parent root = FXMLLoader.load(getClass().getResource("Secondary.fxml"));
-//        
-//        Stage window = (Stage)editButton.getScene().getWindow();
-//        window.setScene(new Scene(root, 1645, 1069));
-//    }
-
-
-
-
-
-
-
-
-//    @FXML
-//    public void searchButton() {
-//        DatabaseConnection connectNow = new DatabaseConnection();
-//        Connection connectDB = connectNow.getConnection();
-//
-//        String connectQuery = "SELECT first_name, last_name, customer_id FROM customers;";
-//
-//        try 
-//        {
-//            Statement statement = connectDB.createStatement();
-//            ResultSet queryResult = statement.executeQuery(connectQuery);
-//
-//            data.clear();
-//
-//            while (queryResult.next()) {
-//                String firstName = queryResult.getString("first_name");
-//                String lastName = queryResult.getString("last_name");
-//                int customerId = queryResult.getInt("customer_id");
-//
-//                data.add(new Customer(firstName, lastName, customerId));
-//            }
-//
-//            // Map columns to Customer properties
-//            firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-//            lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-//            idColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
-//
-//            // Set data to the TableView
-//            dataDisplayTable.setItems(data);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }

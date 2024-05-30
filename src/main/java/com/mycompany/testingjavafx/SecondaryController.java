@@ -94,6 +94,16 @@ public class SecondaryController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb) 
     {
+        
+       quoteTextField.setText(Double.toString(0.0));
+       costTextField.setText(Double.toString(0.0));
+       installTextField.setText(Double.toString(0.0));
+       totalTextField.setText(Double.toString(0.0));
+       soldTextField.setText(Double.toString(0.0));
+       profitTextField.setText(Double.toString(0.0));
+       fiftyTextField.setText(Double.toString(0.0));
+       miscTextField.setText(Double.toString(0.0));
+        
         // Add listeners to the cost and sold text fields
         costTextField.textProperty().addListener(new ChangeListener<String>() 
         {
@@ -249,13 +259,21 @@ public class SecondaryController implements Initializable
             String permitNumber = permitNumberTextField.getText();
             String notes = textAreaNotes.getText();
             String quote = quoteTextField.getText();
+            double quoteDouble = Double.parseDouble(quote);
             String cost = costTextField.getText();
+            double costDouble = Double.parseDouble(cost);
             String install = installTextField.getText();
+            double installDouble = Double.parseDouble(install);
             String totalCost = totalTextField.getText();
+            double totalCostDouble = Double.parseDouble(totalCost);
             String sold = soldTextField.getText();
+            double soldDouble = Double.parseDouble(sold);
             String profit = profitTextField.getText();
+            double profitDouble = Double.parseDouble(profit);
             String fiftyPercent = fiftyTextField.getText();
+            double fiftyPercentDouble = Double.parseDouble(fiftyPercent);
             String misc = miscTextField.getText();
+            double miscDouble = Double.parseDouble(misc);
 
             // Get checkbox states
             boolean hasPermitState = hasPermit.isSelected();
@@ -341,14 +359,14 @@ public class SecondaryController implements Initializable
             updateBlueFormStatement.setDouble(10, contractorFeeDouble);
             updateBlueFormStatement.setString(11, orderedDate);
             updateBlueFormStatement.setString(12, uploadedDate);
-            updateBlueFormStatement.setString(13, quote);
-            updateBlueFormStatement.setString(14, cost);
-            updateBlueFormStatement.setString(15, install);
-            updateBlueFormStatement.setString(16, totalCost);
-            updateBlueFormStatement.setString(17, sold);
-            updateBlueFormStatement.setString(18, profit);
-            updateBlueFormStatement.setString(19, fiftyPercent);
-            updateBlueFormStatement.setString(20, misc);
+            updateBlueFormStatement.setDouble(13, quoteDouble);
+            updateBlueFormStatement.setDouble(14, costDouble);
+            updateBlueFormStatement.setDouble(15, installDouble);
+            updateBlueFormStatement.setDouble(16, totalCostDouble);
+            updateBlueFormStatement.setDouble(17, soldDouble);
+            updateBlueFormStatement.setDouble(18, profitDouble);
+            updateBlueFormStatement.setDouble(19, fiftyPercentDouble);
+            updateBlueFormStatement.setDouble(20, miscDouble);
             updateBlueFormStatement.setBoolean(21, hasPermitState);
             updateBlueFormStatement.setBoolean(22, hasNOCState);
             updateBlueFormStatement.setBoolean(23, hasNOAState);
@@ -388,14 +406,14 @@ public class SecondaryController implements Initializable
             insertBlueFormStatement.setString(11, orderedDate);
             insertBlueFormStatement.setString(12, uploadedDate);
             insertBlueFormStatement.setString(13, permitNumber);
-            insertBlueFormStatement.setString(14, quote);
-            insertBlueFormStatement.setString(15, cost);
-            insertBlueFormStatement.setString(16, install);
-            insertBlueFormStatement.setString(17, totalCost);
-            insertBlueFormStatement.setString(18, sold);
-            insertBlueFormStatement.setString(19, profit);
-            insertBlueFormStatement.setString(20, fiftyPercent);
-            insertBlueFormStatement.setString(21, misc);
+            insertBlueFormStatement.setDouble(14, quoteDouble);
+            insertBlueFormStatement.setDouble(15, costDouble);
+            insertBlueFormStatement.setDouble(16, installDouble);
+            insertBlueFormStatement.setDouble(17, totalCostDouble);
+            insertBlueFormStatement.setDouble(18, soldDouble);
+            insertBlueFormStatement.setDouble(19, profitDouble);
+            insertBlueFormStatement.setDouble(20, fiftyPercentDouble);
+            insertBlueFormStatement.setDouble(21, miscDouble);
             insertBlueFormStatement.setBoolean(22, hasPermitState);
             insertBlueFormStatement.setBoolean(23, hasNOCState);
             insertBlueFormStatement.setBoolean(24, hasNOAState);
